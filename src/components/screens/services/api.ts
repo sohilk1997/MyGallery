@@ -6,7 +6,6 @@ const FLICKR_API_URL =
 export const fetchImages = async () => {
   try {
     const response = await axios.get(FLICKR_API_URL);
-    // console.log("===>", response)
     return response.data.items;
   } catch (error) {
     console.error('Error fetching images:', error);
