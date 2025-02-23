@@ -1,14 +1,24 @@
 import axios from 'axios';
 
-const FLICKR_API_URL =
-  'https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1&tags=dog,kitten,plants';
+export interface ImageItem {
+  title: string;
+  link: string;
+  media: { m: string }; // URL of the image
+  date_taken: string;
+  description: string;
+  tags: string;
+}
 
-export const fetchImages = async () => {
+const fetchImages = async (tag: string): Promise<ImageItem[]> => {
   try {
-    const response = await axios.get(FLICKR_API_URL);
+    const response = await axios.get(
+      `https://www.flickr.com/services/feeds/photos_public.gne?format=json&tags=${tag}&nojsoncallback=1`
+    );
     return response.data.items;
   } catch (error) {
-    console.error('Error fetching images:', error);
+    console.error(`Error fetching ${tag} images:`, error);
     return [];
   }
 };
+
+export default fetchImages;

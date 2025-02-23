@@ -3,6 +3,7 @@ import { View, Text, FlatList, Image, StyleSheet, Dimensions, TouchableOpacity }
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import NetInfo from '@react-native-community/netinfo';
+import fetchImages from './services/api';
 
 const GalleryScreen = () => {
   const [dogImages, setDogImages] = useState([]);
@@ -23,29 +24,17 @@ const GalleryScreen = () => {
   // Fetch images from Flickr API and filter by tags
   useEffect(() => {
     if (!isOnline) return; // Skip API call if offline
-
-    const fetchImages = async () => {
-      try {
-        const response = await axios.get(
-          'https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1&tags=dog,kitten,plants'
-        );
-
-        const allImages = response.data.items;
-
-        // Filter images uniquely for each category
-        const dogImages = allImages.filter((item) => item.tags.includes('dog'));
-        const kittenImages = allImages.filter((item) => item.tags.includes('kitten') );
-        const plantImages = allImages.filter((item) => item.tags.includes('plants') );
-
-        setDogImages(dogImages);
-        setKittenImages(kittenImages);
-        setPlantImages(plantImages);
-      } catch (error) {
-        console.error('Error fetching images:', error);
-      }
+  
+    const fetchAllImages = async () => {
+      setDogImages(await fetchImages('dogs'));
+      setKittenImages(await fetchImages('kitten'));
+      setPlantImages(await fetchImages('plant'));
     };
-    fetchImages();
+
+    fetchAllImages();
+  
   }, [isOnline]);
+  
 
   // Render each image in a square box
   const renderItem = ({ item }) => (
