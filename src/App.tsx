@@ -13,10 +13,12 @@ const App = () => {
   }, []);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer >
       <Stack.Navigator>
         <Stack.Screen name="Gallery" component={GalleryScreen} />
-        <Stack.Screen name="ImageDetail" component={ImageDetailScreen} />
+        <Stack.Screen name="ImageDetail" component={ImageDetailScreen} 
+         options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
